@@ -1,14 +1,13 @@
-%% Attempt to do reachability analysis of a Neural Network ODE
-% Function defined in a different file for CORA
-controlPeriod = 1; % total seconds
+% Reachability analysis of a Neural Network ODE
+
+%% Define layers and neural ODE
+controlPeriod = 25; % total seconds
 reachStep = 0.01; % 1 second
 C = eye(2); % Want to get both of the outputs from NeuralODE
 % Load parameters
-% load('/home/manzand/Documents/Python/neuralODE_examples/odeffnn_spiral.mat')
 load('odeffnn_spiral.mat');
 % Contruct NeuralODE
 layer1 = LayerS(Wb{1},Wb{2}','purelin');
-net1 = FFNNS(layer1); % neural network (input)
 % ODEBlock only linear layers
 % Convert in form of a linear ODE model
 states = 2;
@@ -24,90 +23,44 @@ Cout = eye(states);
 D = zeros(outputs,1);
 numSteps = controlPeriod/reachStep;
 odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
-% odeblock = NonLinearODE(states,inputs,@spiral,reachStep,controlPeriod,C); % Nonlinear ODE plant 
 % Output layers 
 layer4 = LayerS(Wb{7},Wb{8}','purelin');
-layer_out = FFNNS(layer4);
-
-
-% Setup
-x0 = [2.0;0.0]; % This is like the initial input to the ODeblock
-% u = [0]; % Initial input chosen (no inputs as for dynamical plants)
-
-R0 = Star([1.9;-0.1],[2.1;0.1]);
-U = Star(0,0);
-
-% Reachability
-% t = tic;
-% R1 = net1.reach(R0,'approx-star');
-% R2 = odeblock.simReach('direct',R0,U,reachStep,numSteps);
-% % R = odeblock.stepReachStar(R0,U);
-% % R2all = odeblock.intermediate_reachset;
-% R3b = layer_out.reach(R2,'approx-star');
-% tb = toc(t);
-
-% Simulation
-tvec = 0:reachStep:controlPeriod;
-u = zeros(length(tvec),1);
-[ysim, ~, ~] = odeblock.simulate(u, tvec, x0);
-
-% Simulation
-% [tV,ysim] = odeblock.evaluate(x0,u);
-
-% Plot results
-% f = figure;
-% hold on;
-% Star.plotBoxes_2D_noFill(R3b,1,2,'b');
-% plot(ysim(:,1),ysim(:,2),'r');
-% title('NeuralODE demo - Spiral Linear');
-% xlabel('x_1');
-% ylabel('x_2');
-% saveas(f,'spirallinear_0.1.png');
-
-% Repeat with the Neural ODE block
-odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
-% odeblock = NonLinearODE(states,inputs,@spiral,reachStep,controlPeriod,C); % Nonlinear ODE plant 
 odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
 neuralLayers = {layer1, odelayer, layer4};
 neuralode = NeuralODE(neuralLayers);
-R = neuralode.reach(R0); % Reachability
-yyy = neuralode.evaluate(x0);
-% % Plot results
+
+%% Reachability run #1
+% Setup
+x0 = [2.0;0.0]; % This is like the initial input to the ODEblock (initial state)
+R0 = Star([1.9;-0.1],[2.1;0.1]);
+
+t = tic;
+Rb = neuralode.reach(R0); % Reachability
+tb = toc(t);
+yyy = neuralode.evaluate(x0); % Simulation
+
+% Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(R,1,2,'b');
+Star.plotBoxes_2D_noFill(Rb,1,2,'b');
 plot(yyy(1,:),yyy(2,:),'r');
 title('NeuralODE demo - Spiral Linear');
 xlabel('x_1');
 ylabel('x_2');
-% saveas(f,'spirallinear_0.1.png');
+saveas(f,'spirallinear_0.1.png');
 
 %% Reachability run #2
 R0 = Star([1.95;-0.05],[2.05;0.05]);
-U = Star(0,0);
 
-% Reachability
 t = tic;
-R1 = net1.reach(R0,'approx-star');
-R2 = odeblock.simReach('direct',R0,U,reachStep,numSteps);
-% R = odeblock.stepReachStar(R0,U);
-% R2all = odeblock.intermediate_reachset;
-R3a = layer_out.reach(R2,'approx-star');
+Ra = neuralode.reach(R0); % Reachability
 ta = toc(t);
-
-% Simulation
-tvec = 0:reachStep:controlPeriod;
-u = zeros(length(tvec),1);
-[ysim, tsim, xsim] = odeblock.simulate(u, tvec, x0);
-
-% Simulation
-% [tV,ysim] = odeblock.evaluate(x0,u);
 
 % Plot results
 f = figure;
-Star.plotBoxes_2D_noFill(R3a,1,2,'b');
+Star.plotBoxes_2D_noFill(Ra,1,2,'b');
 hold on;
-plot(ysim(:,1),ysim(:,2),'r');
+plot(yyy(1,:),yyy(2,:),'r');
 title('NeuralODE demo - Spiral Linear');
 xlabel('x_1');
 ylabel('x_2');
@@ -115,30 +68,16 @@ saveas(f,'spirallinear_0.05.png');
 
 %% Reachability run #2
 R0 = Star([1.8;-0.2],[2.2;0.2]);
-U = Star(0,0);
 
-% Reachability
 t = tic;
-R1 = net1.reach(R0,'approx-star');
-R2 = odeblock.simReach('direct',R0,U,reachStep,numSteps);
-% R = odeblock.stepReachStar(R0,U);
-% R2all = odeblock.intermediate_reachset;
-R3c = layer_out.reach(R2,'approx-star');
+Rc = neuralode.reach(R0); % Reachability
 tc = toc(t);
-
-% Simulation
-tvec = 0:reachStep:controlPeriod;
-u = zeros(length(tvec),1);
-[ysim, tsim, xsim] = odeblock.simulate(u, tvec, x0);
-
-% Simulation
-% [tV,ysim] = odeblock.evaluate(x0,u);
 
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(R3c,1,2,'b');
-plot(ysim(:,1),ysim(:,2),'r');
+Star.plotBoxes_2D_noFill(Rc,1,2,'b');
+plot(yyy(1,:),yyy(2,:),'r');
 title('NeuralODE demo - Spiral Linear');
 xlabel('x_1');
 ylabel('x_2');
@@ -147,67 +86,50 @@ saveas(f,'spirallinear_0.2.png');
 %% Reachability run #4
 % Match final reachability time of nonlinear spiral models
 controlPeriod = 4; % total seconds
-reachStep = 0.001; % 1 second
+reachStep = 0.005; % 1 second
 numSteps = controlPeriod/reachStep;
 
+odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
+odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
+neuralLayers = {layer1, odelayer, layer4};
+neuralode = NeuralODE(neuralLayers);
+
 R0 = Star([1.95;-0.05],[2.05;0.05]);
-U = Star(0,0);
 
-% Reachability
 t = tic;
-R1 = net1.reach(R0,'approx-star');
-R2 = odeblock.simReach('direct',R0,U,reachStep,numSteps);
-% R = odeblock.stepReachStar(R0,U);
-% R2all = odeblock.intermediate_reachset;
-R3d = layer_out.reach(R2,'approx-star');
+Rd = neuralode.reach(R0); % Reachability
 td = toc(t);
-
-% Simulation
-% tvec = 0:reachStep:controlPeriod;
-% u = zeros(length(tvec),1);
-% [ysim, tsim, xsim] = odeblock.simulate(u, tvec, x0);
-
-% Simulation
-% [tV,ysim] = odeblock.evaluate(x0,u);
 
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(R3d,1,2,'b');
-plot(ysim(:,1),ysim(:,2),'r');
+Star.plotBoxes_2D_noFill(Rd,1,2,'b');
+plot(yyy(1,:),yyy(2,:),'r');
 saveas(f,'spirallinear_0.05_match.png');
 
 %% Reachability run #2
 % Match final reachability time of nonlinear spiral models
 controlPeriod = 3; % total seconds
-reachStep = 0.001; % 1 second
+reachStep = 0.005; % 1 second
 numSteps = controlPeriod/reachStep;
+
+odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
+odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
+neuralLayers = {layer1, odelayer, layer4};
+neuralode = NeuralODE(neuralLayers);
 
 R0 = Star([1.9;-0.1],[2.1;0.1]);
 U = Star(0,0);
 
-% Reachability
 t = tic;
-R1 = net1.reach(R0,'approx-star');
-R2 = odeblock.simReach('direct',R0,U,reachStep,numSteps);
-% R = odeblock.stepReachStar(R0,U);
-% R2all = odeblock.intermediate_reachset;
-R3e = layer_out.reach(R2,'approx-star');
+Re = neuralode.reach(R0); % Reachability
 te = toc(t);
-
-% Simulation
-% tvec = 0:reachStep:controlPeriod;
-% u = zeros(length(tvec),1);
-% [ysim, tsim, xsim] = odeblock.simulate(u, tvec, x0);
-
-% Simulation
-% [tV,ysim] = odeblock.evaluate(x0,u);
 
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(R3e,1,2,'b');
-plot(ysim(:,1),ysim(:,2),'r');
+Star.plotBoxes_2D_noFill(Re,1,2,'b');
+plot(yyy(1,:),yyy(2,:),'r');
 saveas(f,'spirallinear_0.1_match.png');
 
 save('reach.mat','ta','tb','tc','td','te');

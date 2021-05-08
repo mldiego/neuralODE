@@ -1,4 +1,4 @@
-function reach_ffnn_large(pix,numT,noise,XTest,YTest)
+function reach_ffnn_large(pix,numT,noise,XTest,YTest,cora)
 %% Reachability analysis of an image classification ODE_FFNN (MNIST)
 % Architecture of first ffnn mnist model:
 %  - Inputs = 784 (Flatten images to 1D, original 28x28)
@@ -29,8 +29,6 @@ layer2 = LayerS(Wb{3},Wb{4}','poslin');
 layer3 = LayerS(Wb{5},Wb{6}','poslin');
 layer4 = LayerS(Wb{7},Wb{8}','poslin');
 layer5 = LayerS(Wb{9},Wb{10}','purelin');
-layers = [layer1 layer2 layer3 layer4 layer5];
-net1 = FFNNS(layers); % neural network controller
 % ODEBlock only linear layers
 % Convert in form of a linear ODE model
 states = 16;
@@ -53,7 +51,9 @@ odeblock = LinearODE(Aout,Bout,Cout,D,tfinal,numSteps);
 reachStep = tfinal/numSteps;
 % Output layers 
 layer7 = LayerS(Wb{19},Wb{20}','purelin');
-layer_out = FFNNS(layer7);
+odelayer = ODEblockLayer(odeblock,tfinal,reachStep,false);
+neuralLayers = {layer1, layer2, layer3, layer4, layer5, odelayer, layer7};
+neuralode = NeuralODE(neuralLayers);
 
 %% Part 2. Load data and prepare experiments
 
@@ -62,8 +62,6 @@ pixels_attack = randi([1 784],1,pix);
 pred = zeros(numT,1);
 time = zeros(numT,1);
 for i=1:numT
-%     img_flat = double(XTest(:,:,:,i));
-%     img_flat = extractdata(img_flat);
     img_flat = XTest(:,:,:,i);
     img_flat = reshape(img_flat', [1 784])';
     lb = img_flat;
@@ -76,18 +74,12 @@ for i=1:numT
     lb = lb./255;
     ub = ub./255;
     inpS = Star(lb,ub);
-    img_inp = img_flat./255;
-    %% Part 3. Reachability and Simulation
-    % Divide reachability into steps
-    U = [];
+    %% Part 3. Reachability
     t = tic;
-    R1 = net1.reach(inpS,'approx-star');
-    R2all = odeblock.simReach('direct',R1,U,reachStep,numSteps); % LinearODE
-    R2 = R2all(end);
-    R3 = layer_out.reach(R2,'approx-star');
+    Rode = neuralode.reach(inpS);
     time(i) = toc(t);
-    score = robustScore(R3,YTest(i));
-    pred(i) = score;
+    [rv,~] = neuralode.checkRobust(Rode,YTest(i));
+    pred(i) = rv;
 end
 
 %% Part 3. Robustness results
@@ -110,66 +102,64 @@ disp('Average time per image: ' + string(sum(time)/numT));
 save('ffnn_large_nnv.mat','rob','pred','timeT','pix','numT','noise');
 
 %% Section 2. ODEblock with CORA reachability
+if cora
+    %% Part 1. Loading and constructing the NeuralODE
 
-%% Part 1. Loading and constructing the NeuralODE
+    % Convert in form of a linear ODE model
+    odeblockC = LinearODE_cora(Aout,Bout,Cout,D,reachStep,tfinal); % linear ODE plant cora
+    odelayer = ODEblockLayer(odeblockC,tfinal,reachStep,false);
+    neuralLayers = {layer1, layer2, layer3, layer4, layer5, odelayer, layer7};
+    neuralode = NeuralODE(neuralLayers);
 
-% Convert in form of a linear ODE model
-C = eye(16); % Want to get both of the outputs from NeuralODE
-odeblockC = LinearODE_cora(Aout,Bout,Cout,D,reachStep,tfinal); % (Non)linear ODE plant 
+    %% Part 2. Load data and prepare experiments
 
-%% Part 2. Load data and prepare experiments
-
-pred = zeros(numT,1);
-timeC = zeros(numT,1);
-for i=1:numT
-%     img_flat = double(XTest(:,:,:,i));
-%     img_flat = extractdata(img_flat);
-    img_flat = XTest(:,:,:,i);
-    img_flat = reshape(img_flat', [1 784])';
-    lb = img_flat;
-    ub = img_flat;
-    for j=pixels_attack
-        ub(j) = min(255, ub(j)+rand*noise);
-        lb(j) = max(0, lb(j)-rand*noise);
+    pred = zeros(numT,1);
+    timeC = zeros(numT,1);
+    for i=1:numT
+    %     img_flat = double(XTest(:,:,:,i));
+    %     img_flat = extractdata(img_flat);
+        img_flat = XTest(:,:,:,i);
+        img_flat = reshape(img_flat', [1 784])';
+        lb = img_flat;
+        ub = img_flat;
+        for j=pixels_attack
+            ub(j) = min(255, ub(j)+rand*noise);
+            lb(j) = max(0, lb(j)-rand*noise);
+        end
+        % Normalize input (input already normalized)
+        lb = lb./255;
+        ub = ub./255;
+        inpS = Star(lb,ub);
+        %% Part 3. Reachability
+        t = tic;
+        Rode = neuralode.reach(inpS);
+        timeC(i) = toc(t);
+        [rv,~] = neuralode.checkRobust(Rode,YTest(i));
+        pred(i) = rv;
     end
-    % Normalize input (input already normalized)
-    lb = lb./255;
-    ub = ub./255;
-    inpS = Star(lb,ub);
-    img_inp = img_flat./255;
-    %% Part 3. Reachability and Simulation
-    % Divide reachability into steps
-    U = Star(0,0);
-    t = tic;
-    R1 = net1.reach(inpS,'approx-star');
-    R2 = odeblockC.stepReachStar(R1,U);
-    R3 = layer_out.reach(R2,'approx-star');
-    time(i) = toc(t);
-    score = robustScore(R3,YTest(i));
-    pred(i) = score;
+
+
+    %% Robustness results
+
+    pred_acc = pred == 1;
+    timeT = sum(timeC);
+    sum_acc = sum(pred_acc);
+    rob = sum_acc;
+    acc = sum_acc/numT;
+    disp(' ');
+    disp(' ');
+    disp('========== Robustness results (CORA) ===========')
+    disp(' ');
+    disp('Total images evaluated: '+string(numT));
+    disp('ATTACK: Random noise, max value = '+string(noise));
+    disp('Network robust to '+string(sum_acc)+' images.');
+    disp('Total time to evaluate ' + string(numT) + ' images: ' + string(sum(time)) + ' seconds');
+    disp('Average time per image: ' + string(sum(time)/numT));
+
+    save('ffnn_large_cora.mat','rob','pred','timeT','pix','numT','noise');
+
+    % Notify finish
+    sound(tan(1:10000));
 end
-
-
-%% Robustness results
-
-pred_acc = pred == 1;
-timeT = sum(time);
-sum_acc = sum(pred_acc);
-rob = sum_acc;
-acc = sum_acc/numT;
-disp(' ');
-disp(' ');
-disp('========== Robustness results (CORA) ===========')
-disp(' ');
-disp('Total images evaluated: '+string(numT));
-disp('ATTACK: Random noise, max value = '+string(noise));
-disp('Network robust to '+string(sum_acc)+' images.');
-disp('Total time to evaluate ' + string(numT) + ' images: ' + string(sum(time)) + ' seconds');
-disp('Average time per image: ' + string(sum(time)/numT));
-
-save('ffnn_large_cora.mat','rob','pred','timeT','pix','numT','noise');
-
-% Notify finish
-sound(tan(1:10000));
 
 end

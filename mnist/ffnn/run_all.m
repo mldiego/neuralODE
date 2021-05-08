@@ -25,9 +25,10 @@ while sum(cnt_cat) < numT
     end
     ck = ck+1;
 end
+cora = false;
 % Run smaller network
-reach_ffnn_small(pix,numT,noise,XTest,YTest);
+reach_ffnn_small(pix,numT,noise,XTest,YTest,cora);
 % Run medium network
-reach_ffnn(pix,numT,noise,XTest,YTest)
+reach_ffnn(pix,numT,noise,XTest,YTest,cora)
 % % Run larger network
-reach_ffnn_large(pix,numT,noise,XTest,YTest);
+reach_ffnn_large(pix,numT,noise,XTest,YTest,cora);
