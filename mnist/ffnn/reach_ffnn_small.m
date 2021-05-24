@@ -85,7 +85,7 @@ disp('Network robust to '+string(sum_acc)+' images.');
 disp('Total time to evaluate ' + string(numT) + ' images: ' + string(sum(time)) + ' seconds');
 disp('Average time per image: ' + string(sum(time)/numT));
 
-save('ffnn_small_nnv.mat','rob','pred','timeT','pix','numT','noise');
+save("ffnn_small_nnv_"+string(noise)+".mat",'rob','pred','timeT','pix','numT','noise');
 
 %% Section 2. ODEblock with CORA reachability
 if cora

@@ -117,7 +117,7 @@ disp('Unknown images: '+string(unk));
 disp('Not robust images: '+string(notr));
 disp('Total time = ' + string(timeT));
 
-save('cnn_tiny_nnv.mat','rob','rob_ode','timeT','pix','numT','noise');
+save("cnn_tiny_nnv_"+string(noise)+".mat",'rob','rob_ode','timeT','pix','numT','noise');
 
 % Notify finish
 sound(tan(1:3000));

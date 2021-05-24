@@ -117,7 +117,7 @@ disp('Unknown images: '+string(unk));
 disp('Not robust images: '+string(notr));
 disp('Total time = ' + string(timeT));
 
-save('cnn_small_nnv.mat','rob','rob_ode','timeT','pix','numT','noise');
+save("cnn_small_nnv"+string(noise)+".mat",'rob','rob_ode','timeT','pix','numT','noise');
 
 
 %% Section 2. ODEblock with CORA reachability

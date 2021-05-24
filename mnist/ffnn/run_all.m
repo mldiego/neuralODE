@@ -1,7 +1,7 @@
 % Run all 
 pix = 100; % pixels per image to attack
 numT = 1000; % Number of images to evaluate
-noise = 0.1; % noise value (adversarial attack)
+noise = [0.1, 0.05]; % noise value (adversarial attack)
 rng(20); % Set random seed
 % Load all test images
 Xall = processMNISTimages('t10k-images.idx3-ubyte');
@@ -27,8 +27,10 @@ while sum(cnt_cat) < numT
 end
 cora = false;
 % Run smaller network
-reach_ffnn_small(pix,numT,noise,XTest,YTest,cora);
-% Run medium network
-reach_ffnn(pix,numT,noise,XTest,YTest,cora)
-% % Run larger network
-reach_ffnn_large(pix,numT,noise,XTest,YTest,cora);
+for noiseT = noise
+    reach_ffnn_small(pix,numT,noiseT,XTest,YTest,cora);
+    % Run medium network
+    reach_ffnn(pix,numT,noiseT,XTest,YTest,cora)
+    % % Run larger network
+    reach_ffnn_large(pix,numT,noiseT,XTest,YTest,cora);
+end
