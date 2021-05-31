@@ -12,6 +12,7 @@ odeblock = NonLinearODE(2,1,@spiral_non,reachStep,controlPeriod,C); % Nonlinear 
 odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
 neuralLayers = {layer1, odelayer, layer4};
 neuralode = NeuralODE(neuralLayers);
+unsafeR = Star([1.3;-2.0],[2.0;-1.3]);
 
 %% Reachability scenario 1
 % Setup
@@ -28,9 +29,12 @@ f = figure;
 hold on;
 Star.plotBoxes_2D_noFill(R1,1,2,'b');
 plot(yyy(1,:),yyy(2,:),'r');
-title('NeuralODE demo - Spiral Nonlinear');
+Star.plotBoxes_2D(unsafeR,1,2,'m');
 xlabel('x_1');
 ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 saveas(f,'nonlinearspiral_0.05.png')
 
 
@@ -58,9 +62,12 @@ f = figure;
 hold on;
 Star.plotBoxes_2D_noFill(R2,1,2,'b');
 plot(yyy(1,:),yyy(2,:),'r');
-title('NeuralODE demo - Spiral Nonlinear');
+Star.plotBoxes_2D(unsafeR,1,2,'m');
 xlabel('x_1');
 ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 saveas(f,'nonlinearspiral_0.1.png')
 
 %% Safety property

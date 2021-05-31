@@ -28,6 +28,9 @@ layer4 = LayerS(Wb{7},Wb{8}','purelin');
 odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
 neuralLayers = {layer1, odelayer, layer4};
 neuralode = NeuralODE(neuralLayers);
+tvec = 0:reachStep:controlPeriod;
+unsafeR = Star([1.3;-2.0],[2.0;-1.3]);
+
 
 %% Reachability run #1
 % Setup
@@ -44,10 +47,35 @@ f = figure;
 hold on;
 Star.plotBoxes_2D_noFill(Rb,1,2,'b');
 plot(yyy(1,:),yyy(2,:),'r');
-title('NeuralODE demo - Spiral Linear');
+Star.plotBoxes_2D(unsafeR,1,2,'m');
 xlabel('x_1');
 ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 saveas(f,'spirallinear_0.1.png');
+
+f = figure;
+Star.plotRanges_2D(Rb,1,tvec,'b');
+hold on;
+plot(tvec,yyy(1,:),'r');
+xlabel('Time (s)');
+ylabel('x_1');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.1_1.png');
+
+f = figure;
+Star.plotRanges_2D(Rb,2,tvec,'b');
+hold on;
+plot(tvec,yyy(2,:),'r');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.1_2.png');
 
 %% Reachability run #2
 R0 = Star([1.95;-0.05],[2.05;0.05]);
@@ -61,10 +89,35 @@ f = figure;
 Star.plotBoxes_2D_noFill(Ra,1,2,'b');
 hold on;
 plot(yyy(1,:),yyy(2,:),'r');
-title('NeuralODE demo - Spiral Linear');
+Star.plotBoxes_2D(unsafeR,1,2,'m');
 xlabel('x_1');
 ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 saveas(f,'spirallinear_0.05.png');
+
+f = figure;
+Star.plotRanges_2D(Rb,1,tvec,'b');
+hold on;
+plot(tvec,yyy(1,:),'r');
+xlabel('Time (s)');
+ylabel('x_1');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.05_1.png');
+
+f = figure;
+Star.plotRanges_2D(Rb,2,tvec,'b');
+hold on;
+plot(tvec,yyy(2,:),'r');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.05_2.png');
 
 %% Reachability run #2
 R0 = Star([1.8;-0.2],[2.2;0.2]);
@@ -75,64 +128,90 @@ tc = toc(t);
 
 % Plot results
 f = figure;
-hold on;
 Star.plotBoxes_2D_noFill(Rc,1,2,'b');
+hold on;
 plot(yyy(1,:),yyy(2,:),'r');
-title('NeuralODE demo - Spiral Linear');
+Star.plotBoxes_2D(unsafeR,1,2,'m');
 xlabel('x_1');
 ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 saveas(f,'spirallinear_0.2.png');
 
-%% Reachability run #4
-% Match final reachability time of nonlinear spiral models
-controlPeriod = 4; % total seconds
-reachStep = 0.005; % 1 second
-numSteps = controlPeriod/reachStep;
-
-odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
-odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
-neuralLayers = {layer1, odelayer, layer4};
-neuralode = NeuralODE(neuralLayers);
-
-R0 = Star([1.95;-0.05],[2.05;0.05]);
-
-t = tic;
-Rd = neuralode.reach(R0); % Reachability
-td = toc(t);
-
-% Plot results
 f = figure;
+Star.plotRanges_2D(Rb,1,tvec,'b');
 hold on;
-Star.plotBoxes_2D_noFill(Rd,1,2,'b');
-plot(yyy(1,:),yyy(2,:),'r');
-saveas(f,'spirallinear_0.05_match.png');
+plot(tvec,yyy(1,:),'r');
+xlabel('Time (s)');
+ylabel('x_1');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.2_1.png');
 
-%% Reachability run #2
-% Match final reachability time of nonlinear spiral models
-controlPeriod = 3; % total seconds
-reachStep = 0.005; % 1 second
-numSteps = controlPeriod/reachStep;
-
-odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
-odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
-neuralLayers = {layer1, odelayer, layer4};
-neuralode = NeuralODE(neuralLayers);
-
-R0 = Star([1.9;-0.1],[2.1;0.1]);
-U = Star(0,0);
-
-t = tic;
-Re = neuralode.reach(R0); % Reachability
-te = toc(t);
-
-% Plot results
 f = figure;
+Star.plotRanges_2D(Rb,2,tvec,'b');
 hold on;
-Star.plotBoxes_2D_noFill(Re,1,2,'b');
-plot(yyy(1,:),yyy(2,:),'r');
-saveas(f,'spirallinear_0.1_match.png');
+plot(tvec,yyy(2,:),'r');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+saveas(f,'spirallinear_0.2_2.png');
 
-save('reach.mat','ta','tb','tc','td','te');
+% %% Reachability run #4
+% % Match final reachability time of nonlinear spiral models
+% controlPeriod = 4; % total seconds
+% reachStep = 0.005; % 1 second
+% numSteps = controlPeriod/reachStep;
+% 
+% odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
+% odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
+% neuralLayers = {layer1, odelayer, layer4};
+% neuralode = NeuralODE(neuralLayers);
+% 
+% R0 = Star([1.95;-0.05],[2.05;0.05]);
+% 
+% t = tic;
+% Rd = neuralode.reach(R0); % Reachability
+% td = toc(t);
+% 
+% % Plot results
+% f = figure;
+% hold on;
+% Star.plotBoxes_2D_noFill(Rd,1,2,'b');
+% plot(yyy(1,:),yyy(2,:),'r');
+% saveas(f,'spirallinear_0.05_match.png');
+% 
+% %% Reachability run #2
+% % Match final reachability time of nonlinear spiral models
+% controlPeriod = 3; % total seconds
+% reachStep = 0.005; % 1 second
+% numSteps = controlPeriod/reachStep;
+% 
+% odeblock = LinearODE(Aout,Bout',Cout,D,controlPeriod,numSteps);
+% odelayer = ODEblockLayer(odeblock,controlPeriod,reachStep,true);
+% neuralLayers = {layer1, odelayer, layer4};
+% neuralode = NeuralODE(neuralLayers);
+% 
+% R0 = Star([1.9;-0.1],[2.1;0.1]);
+% U = Star(0,0);
+% 
+% t = tic;
+% Re = neuralode.reach(R0); % Reachability
+% te = toc(t);
+% 
+% % Plot results
+% f = figure;
+% hold on;
+% Star.plotBoxes_2D_noFill(Re,1,2,'b');
+% plot(yyy(1,:),yyy(2,:),'r');
+% saveas(f,'spirallinear_0.1_match.png');
+
+% save('reach.mat','ta','tb','tc','td','te');
+save('reach.mat','ta','tb','tc');
 
 
 %% Notes
