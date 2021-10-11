@@ -8,7 +8,7 @@
 addpath('../benchmark_dynamics/');
 
 reachstep = 0.01; % step size to compute reach sets
-final_time = 10; % Time horizon
+final_time = 0.35; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 1e-4; % Uncertainty in dynamics.
 model = NonLinearODE(12,1,@CartPoleLTC_RK, reachstep, final_time,eye(12));
@@ -17,7 +17,7 @@ model = NonLinearODE(12,1,@CartPoleLTC_RK, reachstep, final_time,eye(12));
 % model.options.timeStep = 0.05;
 % model.options.taylorTerms = 4;
 % model.options.zonotopeOrder = 50;
-model.options.alg = 'lin-adaptive';
+model.options.alg = 'poly-adaptive';
 % model.options.tensorOrder = 3;
 
 % Initial states
