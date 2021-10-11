@@ -4,7 +4,7 @@
 controlPeriod = 40; % total seconds
 reachStep = 0.01; % 1 second
 % Load parameters
-load('/home/manzand/Documents/Python/sonode/experiments/damped_oscillators_linear/ilnode(5)/5/model.mat');
+load("C:\Users\diego\Documents\GitHub\Python\sonode\experiments\damped_oscillators_linear\ilnode(5)\5\model.mat");
 % Contruct NeuralODE
 % ODEBlock only linear layers
 % Convert in form of a linear ODE model

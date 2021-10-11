@@ -11,7 +11,7 @@ reachstep = 0.01; % step size to compute reach sets
 final_time = 1; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 1e-4; % Uncertainty in dynamics.
-model = NonLinearODE(12,1,@CTRNN_DampedForcedPendulum, reachstep, final_time,eye(12));
+model = NonLinearODE(12,1,@CartpoleCTRNN, reachstep, final_time,eye(12));
 
 % Change default options
 % model.options.timeStep = 0.05;

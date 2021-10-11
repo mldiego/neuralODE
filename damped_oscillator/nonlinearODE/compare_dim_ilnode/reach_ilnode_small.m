@@ -7,7 +7,8 @@ function reach_ilnode_small(nnpath,dynamics, dim, unc, tfl)
         controlPeriod = 13.0;
         reachStep = 0.01;
     else
-        controlPeriod = 2.0; % total seconds
+        controlPeriod = 30.0; % total seconds
+%         controlPeriod = 0.05; % total seconds
         reachStep = 0.05; % smaller reachStep, more accurate, longer computation
     end
     C = eye(2+dim); % Want to get both of the outputs from NeuralODE
@@ -41,6 +42,8 @@ function reach_ilnode_small(nnpath,dynamics, dim, unc, tfl)
     Rb = neuralode.reach(R0); % Reachability
     ta = toc(t);
     yyy = neuralode.evaluate(x0); % Simulation
+    pointSets = neuralode.Layers{1,2}.odemodel.intermediate_pointSet;
+    save('reach_node0_traj1.mat','ta','Rb');
 
     % Plot results
     f = figure;
