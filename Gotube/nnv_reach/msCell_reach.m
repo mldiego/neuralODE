@@ -11,10 +11,10 @@ model = NonLinearODE(2,1,@MitchellSchaeffer, reachstep, final_time,eye(2));
 
 % Change default options
 % model.options.timeStep = 0.05;
-model.options.taylorTerms = 4;
-model.options.zonotopeOrder = 20;
-model.options.alg = 'lin';
-model.options.tensorOrder = 2;
+% model.options.taylorTerms = 4;
+% model.options.zonotopeOrder = 20;
+% model.options.alg = 'lin';
+% model.options.tensorOrder = 2;
 
 % Initial states
 x0 = [0.8; 0.5];
