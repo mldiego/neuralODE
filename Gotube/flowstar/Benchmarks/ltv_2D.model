@@ -1,0 +1,44 @@
+continuous reachability
+{
+ state var x,y #, t
+	
+ setting
+ {
+  fixed steps 0.01
+  time 5
+  remainder estimation 1e-2
+  identity precondition
+  matlab octagon x,y
+  fixed orders 8
+  cutoff 1e-15
+  precision 100
+  output ltv_test
+  print on
+ }
+ 
+ 
+ # RHS should be of the form ( f1(t) )*x1 + ( f2(t) )*x2 + ...
+ ltv ode
+ {
+  # defining time-invariant uncertainties
+  # each parameter ranging in [-1,1]
+  time-inv
+  { u1, u2 }
+  
+  # defining time-varying uncertainties
+  # each parameter ranging in [-1,1]
+  # the number 50 tells the ltv integrator to symbolically keep the LTV uncertainties for every 50 steps, the larger the number the better the accuracy
+  time-var 50
+  { v1, v2 }
+  {
+  x' =  (-1)*x + (-t)*y + (t)  + (0.5)*u1 + (0.1)*v1
+  y' =  (t^2)*x + y - (t)  + (0.5)*u2 + (0.1)*v2
+  }
+ }
+ 
+ init
+ {
+  x in [1 , 1.5]
+  y in [5 , 5.5]
+ }
+}

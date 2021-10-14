@@ -3,7 +3,7 @@
 
 addpath('../benchmark_dynamics/');
 
-reachstep = 0.01; % step size to compute reach sets
+reachstep = 0.05; % step size to compute reach sets
 final_time = 10; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 0.01; % Uncertainty in dynamics.
@@ -13,7 +13,7 @@ model = NonLinearODE(5,1,@CTRNN_DampedForcedPendulum, reachstep, final_time,eye(
 % model.options.timeStep = 0.05;
 % model.options.taylorTerms = 4;
 % model.options.zonotopeOrder = 50;
-model.options.alg = 'poly-adaptive';
+% model.options.alg = 'lin-adaptive';
 % model.options.tensorOrder = 2;
 
 % Initial states
