@@ -3,7 +3,7 @@
 
 addpath('../benchmark_dynamics/');
 
-reachstep = 0.05; % step size to compute reach sets
+reachstep = 0.01; % step size to compute reach sets
 final_time = 10; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 0.01; % Uncertainty in dynamics.
@@ -26,11 +26,14 @@ input_set = Star(0,0); % No inputs, but need to define it
 % Compute reachability analysis
 t = tic;
 R = model.stepReachStar(init_set,input_set);
-toc(t);
+time = toc(t);
+Rall = model.intermediate_reachSet;
+
+save('../results/dfp_reach.mat','Rall','time')
 
 % Plot reachable sets
 f = figure;
-Star.plotBoxes_2D_noFill(model.intermediate_reachSet,1,2,'b');
+Star.plotBoxes_2D_noFill(Rall,1,2,'b');
 grid;
 hold on;
 % for sets = model.intermediate_reachSet

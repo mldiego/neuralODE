@@ -166,18 +166,18 @@ using ReachabilityAnalysis, Plots
         x_02_prime = theta_dot
         x_03_prime = thetaacc
 
-        dx[0] = x_00_prime
-        dx[1] = x_01_prime
-        dx[2] = x_02_prime
-        dx[3] = x_03_prime
-        dx[4] = h_00_prime
-        dx[5] = h_01_prime
-        dx[6] = h_02_prime
-        dx[7] = h_03_prime
-        dx[8] = h_04_prime
-        dx[9] = h_05_prime
-        dx[10] = h_06_prime
-        dx[11] = h_07_prime
+        dx[1] = x_00_prime
+        dx[2] = x_01_prime
+        dx[3] = x_02_prime
+        dx[4] = x_03_prime
+        dx[5] = h_00_prime
+        dx[6] = h_01_prime
+        dx[7] = h_02_prime
+        dx[8] = h_03_prime
+        dx[9] = h_04_prime
+        dx[10] = h_05_prime
+        dx[11] = h_06_prime
+        dx[12] = h_07_prime
         # has to be in the same order as the input variables
         # ===================================================
 

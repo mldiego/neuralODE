@@ -16,9 +16,9 @@ function main()
 
     println("Running HSCC_comparison benchmarks...")
 
-    # Coupled Van der Pol benchmark (testinnn)
-    println("###\nRunning Van der Pol benchmark\n###")
-    include("models/vanderpol_benchmark.jl")
+    # Spiral 2D
+    println("###\nRunning Spiral 2D benchmark\n###")
+    include("models/spiral_benchmark.jl")
 
     # CTRNN Damped Forced Pendulum
     println("###\nRunning CTRNN DFP benchmark\n###")

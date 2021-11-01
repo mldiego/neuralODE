@@ -4,11 +4,11 @@ continuous reachability
 	
  setting
  {
-  fixed steps 0.001
-  time 0.01
+  fixed steps 0.01
+  time 10.0
   remainder estimation 1e-2
   identity precondition
-  gnuplot interval x1,x2
+  matlab octagon x1,x2
   fixed orders 8
   cutoff 1e-15
   precision 100

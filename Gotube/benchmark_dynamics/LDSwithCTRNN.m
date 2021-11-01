@@ -15,19 +15,28 @@ function dx = LDSwithCTRNN(x,u)
 %     def fdyn(self, t=0, x=None):
 %         if x is None:
 %             x = np.zeros(self.dim, dtype=object)
+        % Load parameters
+        w1 = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/w1.npy');
+        w2 = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/w2.npy');
+        wa = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/wa.npy');
+        b1 = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/b1.npy');
+        b2 = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/b2.npy');
+        ba = readNPY('/home/manzand/Documents/MATLAB/neuralODE/Gotube/benchmark_dynamics/rl/lds/ba.npy');
+
+        hidden = tanh(w1' * x + b1); % tanh
+        dhdt = w2' * hidden + b2; % linear
 % 
-%         hidden = np.tanh(np.dot(x, self.params["w1"]) + self.params["b1"])
-%         dhdt = np.dot(hidden, self.params["w2"]) + self.params["b2"]
-% 
-%         action = np.tanh(np.dot(hidden, self.params["wa"]) + self.params["ba"])
+        action = tanh(wa' * hidden + ba); % tanh
 %         x, y = x[-2:]
+%         x2 = x(2);
+%         y = x(3);
 % 
-%         dxdt = y
-%         dydt = 0.2 + 0.4 * action
+        dxdt = x(10);
+        dydt = 0.2 + 0.4 * action;
 % 
 %         dxdt = np.array([dxdt]).reshape((1,))
 %         dydt = np.array([dydt]).reshape((1,))
 %         dfdt = np.concatenate([dhdt, dxdt, dydt], axis=0)
-%         return dfdt
+        dx = [dhdt;dxdt;dydt];
 end
 

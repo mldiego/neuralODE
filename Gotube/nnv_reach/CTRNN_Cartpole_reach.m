@@ -8,7 +8,7 @@
 addpath('../benchmark_dynamics/');
 
 reachstep = 0.01; % step size to compute reach sets
-final_time = 2.5; % Time horizon
+final_time = 2.0; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 1e-4; % Uncertainty in dynamics.
 model = NonLinearODE(12,1,@CartpoleCTRNN, reachstep, final_time,eye(12));
@@ -30,7 +30,10 @@ input_set = Star(0,0); % No inputs, but need to define it
 % Compute reachability analysis
 t = tic;
 R = model.stepReachStar(init_set,input_set);
-toc(t);
+time = toc(t);
+Rall = model.intermediate_reachSet;
+
+save('../results/cartpole_reach.mat','Rall','time')
 
 % Plot reachable sets
 f = figure;
