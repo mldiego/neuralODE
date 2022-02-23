@@ -16,7 +16,7 @@
 %layer 8: linear(3,3)
 
 % rng(4); % set random seed (This kinda works, takes forever)
-rng(86);
+rng(2025);
 
 %% Create random weight variables
 % Set as global variables the parameters used in the nonlinear dynamics
@@ -30,12 +30,12 @@ w41 = randi(10,6,6); b41 = randi(10,6,1); % layer 4.1
 w42 = randi(10,6,6); b42 = randi(10,6,1);  % layer 4.2
 w5 = randn(6,10)'; b5 = randn(10,1);   % layer 5
 w6 = randn(10,3)'; b6 = randn(3,1);    % layer 6
-w7 = randn(3,3)'; b7 = randn(3,1);     % layer 7
+w7 = randi(10,3,3)'; b7 = randi(10,3,1);     % layer 7
 w8 = randn(3,3)'; b8 = randn(3,1);
 
 %% Create NeuralODE 
 layer1 = LayerS(w1,b1,'purelin'); % linear
-layer2 = LayerS(w2,b2,'poslin'); % relu
+layer2 = LayerS(w2,b2,'tansig'); % relu
 layer3 = LayerS(w3,b3,'purelin'); % linear
 layer5 = LayerS(w5,b5,'purelin'); %linear
 layer6 = LayerS(w6,b6,'poslin'); % relu
@@ -98,8 +98,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj1_cav1_b.pdf','ContentType','vector');
-% saveas(f,"traj1_cav1_b.png");
+exportgraphics(f,'traj1_cav2_b.pdf','ContentType','vector');
+% saveas(f,"traj1_cav2_b.png");
 
 
 f = figure;
@@ -112,8 +112,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj2_cav1_b.pdf','ContentType','vector');
-% saveas(f,"traj2_cav1_b.png");
+exportgraphics(f,'traj2_cav2_b.pdf','ContentType','vector');
+% saveas(f,"traj2_cav2_b.png");
 
 f = figure;
 hold on;
@@ -125,8 +125,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj3_cav1_b.pdf','ContentType','vector');
-% saveas(f,"traj3_cav1_b.png");
+exportgraphics(f,'traj3_cav2_b.pdf','ContentType','vector');
+% saveas(f,"traj3_cav2_b.png");
 
 % tvec = 0:reachStep1:cP1; % time vector for plotting
 % f = figure;
@@ -139,8 +139,8 @@ exportgraphics(f,'traj3_cav1_b.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT1_cav1_b.pdf','ContentType','vector');
-% % saveas(f,"trajT1_cav1_b.png");
+% exportgraphics(f,'trajT1_cav2_b.pdf','ContentType','vector');
+% % saveas(f,"trajT1_cav2_b.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,2,tvec,'k');
@@ -152,8 +152,8 @@ exportgraphics(f,'traj3_cav1_b.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT2_cav1_b.pdf','ContentType','vector');
-% % saveas(f,"trajT2_cav1_b.png");
+% exportgraphics(f,'trajT2_cav2_b.pdf','ContentType','vector');
+% % saveas(f,"trajT2_cav2_b.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,3,tvec,'k');
@@ -165,8 +165,8 @@ exportgraphics(f,'traj3_cav1_b.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT3_cav1_b.pdf','ContentType','vector');
-% % saveas(f,"trajT3_cav1_b.png");
+% exportgraphics(f,'trajT3_cav2_b.pdf','ContentType','vector');
+% % saveas(f,"trajT3_cav2_b.png");
 
 %% Reachability run #2 (a)
 odeblock1 = NonLinearODE(6,1,@dyn1,reachStep1,cP1,C1); % Nonlinear ODE
@@ -199,8 +199,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj1_cav1_a.pdf','ContentType','vector');
-% saveas(f,"traj1_cav1_a.png");
+exportgraphics(f,'traj1_cav2_a.pdf','ContentType','vector');
+% saveas(f,"traj1_cav2_a.png");
 
 f = figure;
 hold on;
@@ -212,8 +212,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj2_cav1_a.pdf','ContentType','vector');
-% saveas(f,"traj2_cav1_a.png");
+exportgraphics(f,'traj2_cav2_a.pdf','ContentType','vector');
+% saveas(f,"traj2_cav2_a.png");
 
 f = figure;
 hold on;
@@ -225,8 +225,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj3_cav1_a.pdf','ContentType','vector');
-% saveas(f,"traj3_cav1_a.png");
+exportgraphics(f,'traj3_cav2_a.pdf','ContentType','vector');
+% saveas(f,"traj3_cav2_a.png");
 
 % tvec = 0:reachStep1:cP1; % time vector for plotting
 % f = figure;
@@ -239,8 +239,8 @@ exportgraphics(f,'traj3_cav1_a.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT1_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT1_cav1_a.png");
+% exportgraphics(f,'trajT1_cav2_a.pdf','ContentType','vector');
+% % saveas(f,"trajT1_cav2_a.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,2,tvec,'k');
@@ -252,8 +252,8 @@ exportgraphics(f,'traj3_cav1_a.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT2_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT2_cav1_a.png");
+% exportgraphics(f,'trajT2_cav2_a.pdf','ContentType','vector');
+% % saveas(f,"trajT2_cav2_a.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,3,tvec,'k');
@@ -265,8 +265,8 @@ exportgraphics(f,'traj3_cav1_a.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT3_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT3_cav1_a.png");
+% exportgraphics(f,'trajT3_cav2_a.pdf','ContentType','vector');
+% % saveas(f,"trajT3_cav2_a.png");
 
 %% Reachability run #3 (c)
 odeblock1 = NonLinearODE(6,1,@dyn1,reachStep1,cP1,C1); % Nonlinear ODE
@@ -299,8 +299,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj1_cav1_c.pdf','ContentType','vector');
-% saveas(f,"traj1_cav1_c.png");
+exportgraphics(f,'traj1_cav2_c.pdf','ContentType','vector');
+% saveas(f,"traj1_cav2_c.png");
 
 f = figure;
 hold on;
@@ -312,8 +312,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj2_cav1_c.pdf','ContentType','vector');
-% saveas(f,"traj2_cav1_c.png");
+exportgraphics(f,'traj2_cav2_c.pdf','ContentType','vector');
+% saveas(f,"traj2_cav2_c.png");
 
 f = figure;
 hold on;
@@ -325,8 +325,8 @@ ax = gca; % Get current axis
 ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-exportgraphics(f,'traj3_cav1_c.pdf','ContentType','vector');
-% saveas(f,"traj3_cav1_c.png");
+exportgraphics(f,'traj3_cav2_c.pdf','ContentType','vector');
+% saveas(f,"traj3_cav2_c.png");
 
 % tvec = 0:reachStep1:cP1; % time vector for plotting
 % f = figure;
@@ -339,8 +339,8 @@ exportgraphics(f,'traj3_cav1_c.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT1_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT1_cav1_a.png");
+% exportgraphics(f,'trajT1_cav2_c.pdf','ContentType','vector');
+% % saveas(f,"trajT1_cav2_c.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,2,tvec,'k');
@@ -352,8 +352,8 @@ exportgraphics(f,'traj3_cav1_c.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT2_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT2_cav1_a.png");
+% exportgraphics(f,'trajT2_cav2_c.pdf','ContentType','vector');
+% % saveas(f,"trajT2_cav2_c.png");
 % 
 % f = figure;
 % Star.plotRanges_2D(Rb,3,tvec,'k');
@@ -365,10 +365,10 @@ exportgraphics(f,'traj3_cav1_c.pdf','ContentType','vector');
 % ax.XAxis.FontSize = 15; % Set font size of axis
 % ax.YAxis.FontSize = 15;
 % legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
-% exportgraphics(f,'trajT3_cav1_a.pdf','ContentType','vector');
-% % saveas(f,"trajT3_cav1_a.png");
+% exportgraphics(f,'trajT3_cav2_c.pdf','ContentType','vector');
+% % saveas(f,"trajT3_cav2_c.png");
 
-save('reach_cav1.mat','ta','tb','tc');
+save('reach_cav2.mat','ta','tb','tc');
 
 % Dynamics of first ODElayer
 function dx = dyn1(x,t)

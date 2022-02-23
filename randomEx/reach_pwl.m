@@ -67,7 +67,7 @@ layer7 = ODEblockLayer(odeblock2,cP1,reachStep1,false);
 neuralLayers = {layer1,layer2,layer3,layer4,layer5,layer6,layer7,layer8};
 neuralode = NeuralODE(neuralLayers);
 
-%% Reachability run #1
+%% Reachability run #1 (b)
 unc = 0.1;
 % Setup
 x0 = rand(3,1); % Initial state 
@@ -83,54 +83,85 @@ yyy = neuralode.evaluate(x0); % Simulation
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,2,'b');
-plot(yyy(1,:),yyy(2,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,2,'k');
+pg = plot(yyy(1,1),yyy(2,1),'k');
 xlabel('x_1');
 ylabel('x_2');
-saveas(f,"traj1_pwl_b.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj1_pwl_b.pdf','ContentType','vector');
+% saveas(f,"traj1_pwl_b.png");
+
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,3,'b');
-plot(yyy(1,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,3,'k');
+pg = plot(yyy(1,1),yyy(3,1),'k');
 xlabel('x_1');
 ylabel('x_3');
-saveas(f,"traj2_pwl_b.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj2_pwl_b.pdf','ContentType','vector');
+% saveas(f,"traj2_pwl_b.png");
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,2,3,'b');
-plot(yyy(2,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,2,3,'k');
+pg = plot(yyy(2,1),yyy(3,1),'k');
 xlabel('x_2');
 ylabel('x_3');
-saveas(f,"traj3_pwl_b.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj3_pwl_b.pdf','ContentType','vector');
+% saveas(f,"traj3_pwl_b.png");
 
 tvec = 0:reachStep1:cP1; % time vector for plotting
 f = figure;
-Star.plotRanges_2D(Rb,1,tvec,'b');
+Star.plotRanges_2D(Rb,1,tvec,'k');
 hold on;
-plot(tvec,yyy(1,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT1_pwl_b.png");
+pg = plot(0, yyy(1,1),'k');
+xlabel('Time (s)');
+ylabel('x_1)');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT1_pwl_b.pdf','ContentType','vector');
+% saveas(f,"trajT1_pwl_b.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,2,tvec,'b');
+Star.plotRanges_2D(Rb,2,tvec,'k');
 hold on;
-plot(tvec,yyy(2,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT2_pwl_b.png");
+pg = plot(0, yyy(2,1),'k');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT2_pwl_b.pdf','ContentType','vector');
+% saveas(f,"trajT2_pwl_b.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,3,tvec,'b');
+Star.plotRanges_2D(Rb,3,tvec,'k');
 hold on;
-plot(tvec,yyy(3,:),'r');
-xlabel('x_2');
+pg = plot(0, yyy(3,1),'k');
+xlabel('Time (s)');
 ylabel('x_3');
-saveas(f,"trajT3_pwl_b.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT3_pwl_b.pdf','ContentType','vector');
+% saveas(f,"trajT3_pwl_b.png");
 
-%% Reachability run #2
+%% Reachability run #2 (a)
 unc = 0.2;
 % Setup
 % x0 = rand(3,1); % Initial state 
@@ -146,54 +177,84 @@ yyy = neuralode.evaluate(x0); % Simulation
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,2,'b');
-plot(yyy(1,:),yyy(2,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,2,'k');
+pg = plot(yyy(1,1),yyy(2,1),'k');
 xlabel('x_1');
 ylabel('x_2');
-saveas(f,"traj1_pwl_a.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj1_pwl_a.pdf','ContentType','vector');
+% saveas(f,"traj1_pwl_a.png");
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,3,'b');
-plot(yyy(1,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,3,'k');
+pg = plot(yyy(1,1),yyy(3,1),'k');
 xlabel('x_1');
 ylabel('x_3');
-saveas(f,"traj2_pwl_a.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj2_pwl_a.pdf','ContentType','vector');
+% saveas(f,"traj2_pwl_a.png");
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,2,3,'b');
-plot(yyy(2,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,2,3,'k');
+pg = plot(yyy(2,1),yyy(3,1),'k');
 xlabel('x_2');
 ylabel('x_3');
-saveas(f,"traj3_pwl_a.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj3_pwl_a.pdf','ContentType','vector');
+% saveas(f,"traj3_pwl_a.png");
 
 tvec = 0:reachStep1:cP1; % time vector for plotting
 f = figure;
-Star.plotRanges_2D(Rb,1,tvec,'b');
+Star.plotRanges_2D(Rb,1,tvec,'k');
 hold on;
-plot(tvec,yyy(1,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT1_pwl_a.png");
+pg = plot(0, yyy(1,1),'k');
+xlabel('Time (s)');
+ylabel('x_1');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT1_pwl_a.pdf','ContentType','vector');
+% saveas(f,"trajT1_pwl_a.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,2,tvec,'b');
+Star.plotRanges_2D(Rb,2,tvec,'k');
 hold on;
-plot(tvec,yyy(2,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT2_pwl_a.png");
+pg = plot(0, yyy(2,1),'k');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT2_pwl_a.pdf','ContentType','vector');
+% saveas(f,"trajT2_pwl_a.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,3,tvec,'b');
+Star.plotRanges_2D(Rb,3,tvec,'k');
 hold on;
-plot(tvec,yyy(3,:),'r');
-xlabel('x_2');
+pg = plot(0, yyy(3,1),'k');
+xlabel('Time (s)');
 ylabel('x_3');
-saveas(f,"trajT3_pwl_a.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT3_pwl_a.pdf','ContentType','vector');
+% saveas(f,"trajT3_pwl_a.png");
 
-%% Reachability run #2
+%% Reachability run #3 (c)
 unc = 0.02;
 % Setup
 % x0 = rand(3,1); % Initial state 
@@ -209,51 +270,81 @@ yyy = neuralode.evaluate(x0); % Simulation
 % Plot results
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,2,'b');
-plot(yyy(1,:),yyy(2,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,2,'k');
+pg = plot(yyy(1,1),yyy(2,1),'k');
 xlabel('x_1');
 ylabel('x_2');
-saveas(f,"traj1_pwl_c.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj1_pwl_c.pdf','ContentType','vector');
+% saveas(f,"traj1_pwl_c.png");
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,1,3,'b');
-plot(yyy(1,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,1,3,'k');
+pg = plot(yyy(1,1),yyy(3,1),'k');
 xlabel('x_1');
 ylabel('x_3');
-saveas(f,"traj2_pwl_c.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj2_pwl_c.pdf','ContentType','vector');
+% saveas(f,"traj2_pwl_c.png");
 
 f = figure;
 hold on;
-Star.plotBoxes_2D_noFill(Rb,2,3,'b');
-plot(yyy(2,:),yyy(3,:),'r');
+Star.plotBoxes_2D_noFill(Rb,2,3,'k');
+pg = plot(yyy(1,1),yyy(3,1),'k');
 xlabel('x_2');
 ylabel('x_3');
-saveas(f,"traj3_pwl_c.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'traj3_pwl_c.pdf','ContentType','vector');
+% saveas(f,"traj3_pwl_c.png");
 
 tvec = 0:reachStep1:cP1; % time vector for plotting
 f = figure;
-Star.plotRanges_2D(Rb,1,tvec,'b');
+Star.plotRanges_2D(Rb,1,tvec,'k');
 hold on;
-plot(tvec,yyy(1,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT1_pwl_c.png");
+pg = plot(0, yyy(1,1),'k');
+xlabel('Time (s)');
+ylabel('x_1');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT1_pwl_c.pdf','ContentType','vector');
+% saveas(f,"trajT1_pwl_c.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,2,tvec,'b');
+Star.plotRanges_2D(Rb,2,tvec,'k');
 hold on;
-plot(tvec,yyy(2,:),'r');
-xlabel('x_2');
-ylabel('x_3');
-saveas(f,"trajT2_pwl_c.png");
+pg = plot(0, yyy(2,1),'k');
+xlabel('Time (s)');
+ylabel('x_2');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT2_pwl_c.pdf','ContentType','vector');
+% saveas(f,"trajT2_pwl_c.png");
 
 f = figure;
-Star.plotRanges_2D(Rb,3,tvec,'b');
+Star.plotRanges_2D(Rb,3,tvec,'k');
 hold on;
-plot(tvec,yyy(3,:),'r');
-xlabel('x_2');
+pg = plot(0, yyy(3,1),'k');
+xlabel('Time (s)');
 ylabel('x_3');
-saveas(f,"trajT3_pwl_c.png");
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
+legend(pg,{'NNVODE (ours)'},"Location","best",'FontSize',14);
+exportgraphics(f,'trajT3_pwl_c.pdf','ContentType','vector');
+% saveas(f,"trajT3_pwl_c.png");
 
 save('reach_pwl.mat','ta','tb','tc');
