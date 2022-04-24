@@ -4,7 +4,7 @@
 addpath('../benchmark_dynamics/');
 
 reachstep = 0.05; % step size to compute reach sets
-final_time = 40; % Time horizon
+final_time = 40.0; % Time horizon
 % MU = 1.3; % What is MU in Gotube?
 Initial_radius = 0.01; % Uncertainty in dynamics.
 model = NonLinearODE(2,1,@vanderpol, reachstep, final_time,eye(2));

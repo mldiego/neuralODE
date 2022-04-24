@@ -17,6 +17,7 @@
 
 % rng(4); % set random seed (This kinda works, takes forever)
 rng(2023);
+% rng(randi(2^32));
 
 %% Create random weight variables
 % Set as global variables the parameters used in the nonlinear dynamics
@@ -38,8 +39,11 @@ layer1 = LayerS(w1,b1,'purelin'); % linear
 layer2 = LayerS(w2,b2,'poslin'); % relu
 layer3 = LayerS(w3,b3,'purelin'); % linear
 layer5 = LayerS(w5,b5,'purelin'); %linear
+% layer5 = LayerS(w5,b5,'tansig'); %linear
 layer6 = LayerS(w6,b6,'poslin'); % relu
+% layer6 = LayerS(w6,b6,'tansig'); % relu
 layer8 = LayerS(w8,b8,'purelin'); % linear
+% layer8 = LayerS(w8,b8,'tansig');
 % odeblock 1 (timeseries) (layer4)
 cP1 = 1; % tf simulation
 reachStep1 = 0.01; % reach step
@@ -376,8 +380,9 @@ save('reach_cav4.mat','ta','tb','tc');
 function dx = dyn1(x,t)
     global w41 b41 w42 b42;
 %     dx1 = logsig(w41*x+b41);
-    dx1 = w41*x+b41;
-    dx = logsig(w42*dx1+b42);
+    dx1 = logsig(w41*x+b41);
+    dx = tansig(w42*dx1+b42);
+%     dx = logsig(w42*dx1+b42);
 %     dx = w42*dx1+b42;
 end
 

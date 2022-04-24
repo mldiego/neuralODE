@@ -1,4 +1,4 @@
-function reach_small(pix,numT,noise,XTest,YTest,cora)
+function reach_small(pix,numT,noise,XTest,YTest,cora,perturbation)
 %% Reachability analysis of an image classification ODE_FFNN (MNIST)
 % Architecture of first ffnn mnist model:
 %  - Inputs = 28x28 images 
@@ -21,7 +21,7 @@ function reach_small(pix,numT,noise,XTest,YTest,cora)
 %% Part 1. Loading and constructing the NeuralODE
 
 % Load network parameters
-file_path = '../../../../Python/neuralODE_examples/mnist/odecnn_mnist_small.mat';
+file_path = '../networks/odecnn_mnist_small.mat';
 load(file_path); % Load neuralODe parameters 
 % Contruct NeuralODE
 % w1 = reshape(Wb{1},[3 3 1 16]);
@@ -76,7 +76,8 @@ neuralode = NeuralODE(neuralLayers);
 %% Part 2. Load data and prepare experiments
 
 noise = noise*255; % noise 1/10 of max pixel value
-pixels_attack = randi([28 28],1,pix);
+% pixels_attack = randi([28 28],1,pix);
+pixels_attack = randperm(784,pix);
 % pred = zeros(numT,1);
 time = zeros(numT,1);
 % pred_ode = zeros(numT,1);
@@ -90,9 +91,18 @@ for i=1:numT
     img_flat = XTest(:,:,:,i)';
     lb = img_flat;
     ub = img_flat;
-    for j=pixels_attack
-        ub(j) = min(255, ub(j)+rand*noise);
-        lb(j) = max(0, lb(j)-rand*noise);
+    if strcmp(perturbation,'random')
+        for j=pixels_attack
+            ub(j) = min(255, ub(j)+noise);
+            lb(j) = max(0, lb(j)-noise);
+        end
+    elseif strcmp(perturbation,'inf')
+        for j=pixels_attack
+            ub(j) = min(255, ub(j)+noise);
+            lb(j) = max(0, lb(j)-noise);
+        end
+    else
+        error('Wrong perturbation type')
     end
     % Normalize input
     lb = lb./255;
@@ -117,7 +127,7 @@ disp('Unknown images: '+string(unk));
 disp('Not robust images: '+string(notr));
 disp('Total time = ' + string(timeT));
 
-save("cnn_small_nnv"+string(noise)+".mat",'rob','rob_ode','timeT','pix','numT','noise');
+save("cnn_small_nnv_"+string(perturbation)+"_"+string(noise)+".mat",'rob','rob_ode','timeT','pix','numT','noise');
 
 
 %% Section 2. ODEblock with CORA reachability

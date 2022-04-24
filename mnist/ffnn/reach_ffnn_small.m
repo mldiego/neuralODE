@@ -1,4 +1,4 @@
-function reach_ffnn_small(pix,numT,noise,XTest,YTest,cora)
+function reach_ffnn_small(pix,numT,noise,XTest,YTest,cora,perturbation)
 %% Reachability analysis of an image classification ODE_FFNN (MNIST - small)
 % Architecture of first ffnn mnist model:
 %  - Inputs = 784 (Flatten images to 1D, original 28x28)
@@ -15,7 +15,7 @@ function reach_ffnn_small(pix,numT,noise,XTest,YTest,cora)
 %% Part 1. Loading and constructing the NeuralODE
 
 % Load network parameters
-file_path = '../../../../Python/neuralODE_examples/mnist/odeffnn_mnist_small.mat';
+file_path = '../networks/odeffnn_mnist_small.mat';
 load(file_path); % Load neuralODe parameters 
 % Contruct NeuralODE
 layer1 = LayerS(Wb{1},Wb{2}','poslin');
@@ -43,7 +43,8 @@ neuralode = NeuralODE(neuralLayers);
 %% Part 2. Load data and prepare experiments
 
 noise = noise*255; % noise 1/10 of max pixel value
-pixels_attack = randi([1 784],1,pix);
+% pixels_attack = randi([1 784],1,pix);
+pixels_attack = randperm(784,pix);
 pred = zeros(numT,1);
 time = zeros(numT,1);
 for i=1:numT
@@ -51,9 +52,18 @@ for i=1:numT
     img_flat = reshape(img_flat', [1 784])';
     lb = img_flat;
     ub = img_flat;
-    for j=pixels_attack
-        ub(j) = min(255, ub(j)+rand*noise);
-        lb(j) = max(0, lb(j)-rand*noise);
+    if strcmp(perturbation,'random')
+        for j=pixels_attack
+            ub(j) = min(255, ub(j)+noise);
+            lb(j) = max(0, lb(j)-noise);
+        end
+    elseif strcmp(perturbation,'inf')
+        for j=pixels_attack
+            ub(j) = min(255, ub(j)+noise);
+            lb(j) = max(0, lb(j)-noise);
+        end
+    else
+        error('Wrong perturbation type')
     end
     % Normalize input (input already normalized)
     lb = lb./255;
@@ -85,7 +95,7 @@ disp('Network robust to '+string(sum_acc)+' images.');
 disp('Total time to evaluate ' + string(numT) + ' images: ' + string(sum(time)) + ' seconds');
 disp('Average time per image: ' + string(sum(time)/numT));
 
-save("ffnn_small_nnv_"+string(noise)+".mat",'rob','pred','timeT','pix','numT','noise');
+save("ffnn_small_nnv_"+string(perturbation)+"_"+string(noise)+".mat",'rob','pred','timeT','pix','numT','noise');
 
 %% Section 2. ODEblock with CORA reachability
 if cora
