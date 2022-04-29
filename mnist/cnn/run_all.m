@@ -1,7 +1,7 @@
 % Run all 
 pix = 80; % pixels per image to attack
 numT = 50; % Number of images to evaluate
-noise = [2/255,5/255,10/255]; % noise value (adversarial attack)
+noise = [2.55/255,12.75/255,25.5/255]; % noise value (adversarial attack)
 rng(2022); % Set random seed
 % Load all test images
 Xall = processMNISTimages('t10k-images.idx3-ubyte');

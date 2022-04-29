@@ -1,6 +1,6 @@
 % Run all 
 pix = 784; % pixels per image to attack
-numT = 1000; % Number of images to evaluate
+numT = 50; % Number of images to evaluate
 noise = [0.5/255,1/255,2/255]; % noise value (adversarial attack)
 % noise = [2/255, 5/255, 10/255];
 rng(20); % Set random seed
