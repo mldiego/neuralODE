@@ -37,21 +37,34 @@ t_gap = 1.4;
 D_default = 10;
 outAll = [];
 safe_dis = [];
-for i=1:length(plant.intermediate_reachSet)
-    outAll = [outAll plant.intermediate_reachSet(i).affineMap(output_mat,[])];
-    safe_dis = [safe_dis plant.intermediate_reachSet(i).affineMap([0 0 0 0 t_gap 0], D_default)];
+% for i=1:length(plant.intermediate_reachSet)
+%     outAll = [outAll plant.intermediate_reachSet(i).affineMap(output_mat,[])];
+%     safe_dis = [safe_dis plant.intermediate_reachSet(i).affineMap([0 0 0 0 t_gap 0], D_default)];
+% end
+% times = reachStep:reachStep:tF;
+for i=1:length(R)
+    outAll = [outAll R(i).affineMap(output_mat,[])];
+    safe_dis = [safe_dis R(i).affineMap([0 0 0 0 t_gap 0], D_default)];
 end
-times = reachStep:reachStep:tF;
-% save('../../results/ACC/reach.mat','R','rT','-v7.3');
+times = 0:controlPeriod:tF;
 f = figure;
+hold on;
+pb = plot(0,85,'m');
+pr = plot(0,85,'r');
 Star.plotRanges_2D(outAll,2,times,'r');
 hold on;
-Star.plotRanges_2D(safe_dis,1,times,'b');
+Star.plotRanges_2D(safe_dis,1,times,'m');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 xlabel('Time (s)');
 ylabel('Distance (m)')
-saveas(f,'reach_orig.png');
+legend([pr,pb],{'rel dist','safe dist'},"Location","best",'FontSize',14);
+% saveas(f,'reach_orig.png');
+exportgraphics(f,'reach_orig.pdf','ContentType','vector');
 % Visualize all variables
-trajR = plant.intermediate_reachSet;
+% trajR = plant.intermediate_reachSet;
+trajR = R;
 f = figure;
 subplot(2,3,1)
 Star.plotRanges_2D(trajR,1,times,'r');

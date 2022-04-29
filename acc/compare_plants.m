@@ -34,9 +34,6 @@ controlPeriod = 0.1;
 output_mat = [0 0 0 0 1 0;1 0 0 -1 0 0; 0 1 0 0 -1 0]; % feedback: relative distance, relative velocity and ego-car velocity
 orig = NonLinearODE(6,2,@acc_dynamics, 0.01, 1, output_mat);
 
-%% Compare simulations
-
-
 %% Compare different reach set trajectories 
 % Why are we getting different closed-loop behavior?
 % Scenario 1
@@ -55,13 +52,13 @@ Rnl = nl.stepReachStar(X0,U,'lin');
 Rnl_all = [X0 nl.intermediate_reachSet];
 % Visualize results
 times = 0:0.01:1;
-figure;
+f = figure;
 subplot(2,3,1)
 Star.plotRanges_2D(Ro_all,1,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,1,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,1,times,'g');
+Star.plotRanges_2D(Rnl_all,1,times,'k');
 xlabel('Time (s)');
 ylabel('xlead');
 subplot(2,3,2)
@@ -69,7 +66,7 @@ Star.plotRanges_2D(Ro_all,2,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,2,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,2,times,'g');
+Star.plotRanges_2D(Rnl_all,2,times,'k');
 xlabel('Time (s)')
 ylabel('vlead')
 subplot(2,3,3)
@@ -77,7 +74,7 @@ Star.plotRanges_2D(Ro_all,3,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,3,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,3,times,'g');
+Star.plotRanges_2D(Rnl_all,3,times,'k');
 xlabel('Time (s)')
 ylabel('alead')
 subplot(2,3,4)
@@ -85,7 +82,7 @@ Star.plotRanges_2D(Ro_all,4,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,4,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,4,times,'g');
+Star.plotRanges_2D(Rnl_all,4,times,'k');
 xlabel('Time (s)')
 ylabel('xego')
 subplot(2,3,5)
@@ -93,7 +90,7 @@ Star.plotRanges_2D(Ro_all,5,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,5,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,5,times,'g');
+Star.plotRanges_2D(Rnl_all,5,times,'k');
 xlabel('Time (s)')
 ylabel('vego')
 subplot(2,3,6)
@@ -101,9 +98,10 @@ Star.plotRanges_2D(Ro_all,6,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,6,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,6,times,'g');
+Star.plotRanges_2D(Rnl_all,6,times,'k');
 xlabel('Time (s)')
 ylabel('aego')
+saveas(f,'plant_compare1.png')
 
 %% Scenario 2
 lb = [90; 32; 0; 10; 31; 0];
@@ -121,13 +119,13 @@ Rnl = nl.stepReachStar(X0,U,'lin');
 Rnl_all = [X0 nl.intermediate_reachSet(101:end)];
 % Visualize results
 times = 0:0.01:1;
-figure;
+f = figure;
 subplot(2,3,1)
 Star.plotRanges_2D(Ro_all,1,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,1,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,1,times,'g');
+Star.plotRanges_2D(Rnl_all,1,times,'k');
 xlabel('Time (s)');
 ylabel('xlead');
 subplot(2,3,2)
@@ -135,7 +133,7 @@ Star.plotRanges_2D(Ro_all,2,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,2,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,2,times,'g');
+Star.plotRanges_2D(Rnl_all,2,times,'k');
 xlabel('Time (s)')
 ylabel('vlead')
 subplot(2,3,3)
@@ -143,7 +141,7 @@ Star.plotRanges_2D(Ro_all,3,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,3,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,3,times,'g');
+Star.plotRanges_2D(Rnl_all,3,times,'k');
 xlabel('Time (s)')
 ylabel('alead')
 subplot(2,3,4)
@@ -151,7 +149,7 @@ Star.plotRanges_2D(Ro_all,4,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,4,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,4,times,'g');
+Star.plotRanges_2D(Rnl_all,4,times,'k');
 xlabel('Time (s)')
 ylabel('xego')
 subplot(2,3,5)
@@ -159,7 +157,7 @@ Star.plotRanges_2D(Ro_all,5,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,5,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,5,times,'g');
+Star.plotRanges_2D(Rnl_all,5,times,'k');
 xlabel('Time (s)')
 ylabel('vego')
 subplot(2,3,6)
@@ -167,11 +165,12 @@ Star.plotRanges_2D(Ro_all,6,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,6,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,6,times,'g');
+Star.plotRanges_2D(Rnl_all,6,times,'k');
 xlabel('Time (s)')
 ylabel('aego')
+saveas(f,'plant_compare2.png')
 
-% Scenario 3
+%% Scenario 3
 lb = [90; 32; 0; 10; 31; 0];
 ub = [110; 32.2; 0; 11; 31.2; 0];
 init_set = Star(lb,ub);
@@ -187,13 +186,13 @@ Rnl = nl.stepReachStar(X0,U,'lin');
 Rnl_all = [X0 nl.intermediate_reachSet(201:end)];
 % Visualize results
 times = 0:0.01:1;
-figure;
+f = figure;
 subplot(2,3,1)
 Star.plotRanges_2D(Ro_all,1,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,1,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,1,times,'g');
+Star.plotRanges_2D(Rnl_all,1,times,'k');
 xlabel('Time (s)');
 ylabel('xlead');
 subplot(2,3,2)
@@ -201,7 +200,7 @@ Star.plotRanges_2D(Ro_all,2,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,2,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,2,times,'g');
+Star.plotRanges_2D(Rnl_all,2,times,'k');
 xlabel('Time (s)')
 ylabel('vlead')
 subplot(2,3,3)
@@ -209,7 +208,7 @@ Star.plotRanges_2D(Ro_all,3,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,3,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,3,times,'g');
+Star.plotRanges_2D(Rnl_all,3,times,'k');
 xlabel('Time (s)')
 ylabel('alead')
 subplot(2,3,4)
@@ -217,7 +216,7 @@ Star.plotRanges_2D(Ro_all,4,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,4,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,4,times,'g');
+Star.plotRanges_2D(Rnl_all,4,times,'k');
 xlabel('Time (s)')
 ylabel('xego')
 subplot(2,3,5)
@@ -225,7 +224,7 @@ Star.plotRanges_2D(Ro_all,5,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,5,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,5,times,'g');
+Star.plotRanges_2D(Rnl_all,5,times,'k');
 xlabel('Time (s)')
 ylabel('vego')
 subplot(2,3,6)
@@ -233,6 +232,7 @@ Star.plotRanges_2D(Ro_all,6,times,'r');
 hold on;
 Star.plotRanges_2D(Rl,6,times,'b');
 hold on;
-Star.plotRanges_2D(Rnl_all,6,times,'g');
+Star.plotRanges_2D(Rnl_all,6,times,'k');
 xlabel('Time (s)')
 ylabel('aego')
+saveas(f,'plant_compare3.png')

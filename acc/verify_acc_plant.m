@@ -93,23 +93,18 @@ for k=1:N
     R1 = plant.simReach('direct', X0, U, ts, 10, []); % reachability of plant
     X0 = R1(end); % Get only last reach set (reach set at control period)
     trajR = [trajR X0]; % Keep track of trajectory of NNCS
-%     Xout = X0.affineMap(C(1:6,:),[]);
     ppp = X0.affineMap(map_mat,[]);
     Uin = U_fix.concatenate(ppp);
     Rc = net.reach(Uin,'approx-star');
-%     Rc = Rc(end); % Get only last reach set (reach set at control period)
-%     Rc = Rc.affineMap(cont_map,[]); % Only care about output #1
     trajU = [trajU Rc];
     x08 = X0.affineMap([0 0 0 0 0 0 0 1],[]);
     X0 = X0.affineMap(C(1:6,:),[]); % Get set for variables 1 to 6
     X0 = X0.concatenate(Rc); % Add state/input 7 (a_ego)
-%     X0 = X0.concatenate(Up_fix); % Add state/input 8 (a_lead) constant = 0
     X0 = X0.concatenate(x08);
-    if X0.nVar > 1000
+    if X0.nVar > 100
         X0 = X0.getBox;
         X0 = X0.toStar;
     end
-%     disp("Sim Time = "+string(k*cp));
 end
 rT = toc(t);
 save('results_linearplant.mat','rT',"trajR","trajU");
@@ -125,17 +120,26 @@ for i=1:length(trajR)
     safe_dis = [safe_dis trajR(i).affineMap([0 0 0 0 alp*t_gap 0 0 0], alp*D_default)];
 end
 times = 0:0.1:0.1*N;
-% save('../../results/ACC/reach.mat','R','rT','-v7.3');
 f = figure;
-Star.plotRanges_2D(outAll,1,times,'r');
 hold on;
-Star.plotRanges_2D(safe_dis,1,times,'b');
+pb = plot(0,85,'b');
+pr = plot(0,85,'m');
+Star.plotRanges_2D(outAll,1,times,'b');
+hold on;
+Star.plotRanges_2D(safe_dis,1,times,'m');
+ax = gca; % Get current axis
+ax.XAxis.FontSize = 15; % Set font size of axis
+ax.YAxis.FontSize = 15;
 xlabel('Time (s)');
 ylabel('Distance (m)')
-saveas(f,'reach_plant.png');
+legend([pr,pb],{'safe dist','rel dist'},"Location","best",'FontSize',14);
+% saveas(f,'reach_plant.png');
+exportgraphics(f,'reach_plant.pdf','ContentType','vector');
+
+
 f = figure;
 subplot(2,3,1)
-Star.plotRanges_2D(trajR,1,times,'r');
+Star.plotRanges_2D(trajR,1,times,'b');
 xlabel('Time (s)');
 ylabel('xlead');
 subplot(2,3,2)
