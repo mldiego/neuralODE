@@ -95,6 +95,7 @@ ax.XAxis.FontSize = 15; % Set font size of axis
 ax.YAxis.FontSize = 15;
 xlabel('Time (s)');
 ylabel('Distance (m)')
+ylim([40 110])
 legend([pr,pb],{'rel dist','safe dist'},"Location","best",'FontSize',14);
 % saveas(f,'reach_plant.png');
 exportgraphics(f,'reach_tanhplant.pdf','ContentType','vector');
